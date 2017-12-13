@@ -123,6 +123,7 @@ export default class Grid extends PureComponent {
   }
 
   _playButton(speed) {
+    clearInterval(this.props.board.get('intervalId'));
     return this.props.actions.setIntervalId(
       setInterval(
         this.props.actions.playGame,
