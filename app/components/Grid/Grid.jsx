@@ -48,9 +48,11 @@ export default class Grid extends PureComponent {
   componentWillReceiveProps(nextProps) {
     const oldRows = this.state.rows;
     const oldSpeed = this.state.speed;
+    const prevFullGrid = this.state.fullGrid;
     const rows = nextProps.board.get('rows');
     const cols = nextProps.board.get('cols');
     const speed = nextProps.board.get('speed');
+    const fullGrid = nextProps.board.get('fullGrid');
     /* Board Size changed */
     if (oldRows !== rows) {  // board changed size
       clearInterval(this.props.board.get('intervalId'));
@@ -69,11 +71,14 @@ export default class Grid extends PureComponent {
       });
     }
 
-    const fullGrid = nextProps.board.get('fullGrid');
-    const newGridDisplay = this._createGridDisplay(fullGrid);
-    return this.setState({
-      gridDisplay: newGridDisplay,
-    });
+    if (fullGrid !== prevFullGrid) {
+      const newGridDisplay = this._createGridDisplay(fullGrid);
+      return this.setState({
+        gridDisplay: newGridDisplay,
+      });
+    }
+    return false;
+
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -127,7 +132,7 @@ export default class Grid extends PureComponent {
     return this.props.actions.setIntervalId(
       setInterval(
         this.props.actions.playGame,
-        speed
+        speed || this.props.board.get('speed')
       )
     );
   }
