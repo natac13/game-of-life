@@ -1,0 +1,14 @@
+export const SET_GENERATIONS = 'SET_GENERATIONS';
+export const CREATE_GRID = 'CREATE_GRID';
+export const SELECT_BOX = 'SELECT_BOX';
+export const SEED = 'SEED';
+export const PLAY_GAME = 'PLAY_GAME';
+export const SET_INTERVAL_ID = 'SET_INTERVAL_ID';
+export const CLEAR_GRID = 'CLEAR_GRID';
+export const SLOW = 'SLOW';
+export const FAST = 'FAST';
+export const SMALL = 'SMALL';
+export const MEDIUM = 'MEDIUM';
+export const LARGE = 'LARGE';
+export const START = 'START';
+export const STOP = 'STOP';
