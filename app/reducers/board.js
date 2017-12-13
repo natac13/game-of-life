@@ -26,6 +26,7 @@ const initialState = Map({
 });
 
 function clearGrid(state) {
+  clearInterval(state.get('intervalId'));
   const rows = state.get('rows');
   const cols = state.get('cols');
   const fresh = List(Array(rows).fill()).map(
@@ -168,11 +169,11 @@ function board(state = initialState, action) {
     case FAST:
       return state.set('speed', 100);
     case SMALL:
-      return state.set('rows', 10).set('cols', 20);
+      return state.set('rows', 15).set('cols', 30);
     case MEDIUM:
-      return state.set('rows', 20).set('cols', 40);
+      return state.set('rows', 30).set('cols', 50);
     case LARGE:
-      return state.set('rows', 40).set('cols', 60);
+      return state.set('rows', 50).set('cols', 75);
     default:
       return state;
   }

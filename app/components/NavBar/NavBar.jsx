@@ -16,18 +16,18 @@ function NavBar(props) {
       <Navbar inverse collapseOnSelect fixedTop>
           <Navbar.Header>
             <Navbar.Brand>
-              <a onClick={() => actions.push('/')}>Action Plan</a>
+              <a onClick={() => actions.push('/')}>Game Of Life</a>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
-          <Navbar.Collapse>
+{/*          <Navbar.Collapse>
             <Nav pullRight>
               <NavItem
                 eventKey={1}
-                onClick={() => actions.push('/security-form')}
-              >Security Form</NavItem>
+                onClick={}
+              ></NavItem>
             </Nav>
-          </Navbar.Collapse>
+          </Navbar.Collapse>*/}
         </Navbar>
     </section>
   );

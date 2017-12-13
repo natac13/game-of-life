@@ -80,6 +80,16 @@ export default class Grid extends PureComponent {
     });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    const { rows, speed } = this.state;
+    const oldRows = prevState.rows;
+    if (rows !== oldRows) {
+      // Grid Changed
+      this.props.actions.seed();
+      this._playButton(speed);
+    }
+  }
+
   componentDidMount() {
     this.props.actions.seed();
     this._playButton(this.props.board.get('speed'));

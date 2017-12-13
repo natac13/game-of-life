@@ -1,7 +1,11 @@
 import React, { PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import classnames from 'classnames';
-import { Button } from 'react-bootstrap';
+import {
+  Button,
+  DropdownButton,
+  MenuItem,
+} from 'react-bootstrap';
 
 
 import style from './style.scss';
@@ -45,32 +49,22 @@ function Controls(props) {
         onClick={actions.seed}
       >Seed</Button>
 
-      <Button
+      <DropdownButton
         type="button"
-        onClick={actions.fast}
-      >Fast</Button>
+        title="Speed"
+      >
+        <MenuItem eventKey="slow" onClick={actions.slow}>Slow</MenuItem>
+        <MenuItem eventKey="fast" onClick={actions.fast}>Fast</MenuItem>
+      </DropdownButton>
 
-      <Button
+      <DropdownButton
         type="button"
-        onClick={actions.slow}
-      >Slow</Button>
-
-      <Button
-        type="button"
-        onClick={actions.small}
-      >Small 10 X 20</Button>
-
-
-      <Button
-        type="button"
-        onClick={actions.medium}
-      >Medium 20 X 40</Button>
-
-      <Button
-        type="button"
-        onClick={actions.large}
-      >Large 40 X 600</Button>
-
+        title="Grid Size"
+      >
+        <MenuItem eventKey="s" onClick={actions.small}>Small 15 X 30</MenuItem>
+        <MenuItem eventKey="m" onClick={actions.medium}>Medium 30 X 50</MenuItem>
+        <MenuItem eventKey="l" onClick={actions.large}>Large 50 X 75</MenuItem>
+      </DropdownButton>
     </section>
   );
 }
