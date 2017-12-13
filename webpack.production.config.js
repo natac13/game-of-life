@@ -108,7 +108,6 @@ module.exports = {
       template: './app/index.html',
       inject: false,
       filename: 'index.html',
-      favicon: './favicon.ico',
     }),
     new UglifyJSPlugin({
       cache: true,  // node_modules/.cache/uglify-webpack-plugin
