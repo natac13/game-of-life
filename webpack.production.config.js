@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const uglifyJSPlugin = require('uglify-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 const extractSass = new ExtractTextPlugin({
   // filename: '[name].[contenthash:base64:5].css',
@@ -17,7 +17,7 @@ module.exports = {
   devtool: 'source-map',
   entry: [
     // sets up an ES6-ish environment with promise support
-    // 'babel-polyfill', do not need here as in the webpack.server.js file
+    // 'babel-polyfill', //do not need here as in the webpack.server.js file
     // the main application script
     ENTRY_PATH,
   ],
@@ -45,11 +45,7 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             cacheDirectory: true,
-            presets: [
-              'env',
-              'stage-1',
-              'react',
-            ],
+            presets: ['env', 'stage-1', 'react'],
           },
         }],
       },
@@ -112,12 +108,13 @@ module.exports = {
       template: './app/index.html',
       inject: false,
       filename: 'index.html',
+      favicon: './favicon.ico',
     }),
-    new webpack.optimize.DedupePlugin(),
-    uglifyJSPlugin({
+    new UglifyJSPlugin({
       cache: true,  // node_modules/.cache/uglify-webpack-plugin
       parallel: true,
       sourceMap: true,
+      // uglifyOptions: { ecma: 8 },
     }),
     new webpack.EnvironmentPlugin({
       'process.env.NODE_ENV': JSON.stringify('production'),

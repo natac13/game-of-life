@@ -28,15 +28,17 @@ module.exports = {
     __dirname: true,
   },
   module: {
-    loaders: [
+    rules: [
       {
-        test: /\.jsx?/,
-        loader: 'babel',
-        exclude: /node_modules/,
-        query: {
-          cacheDirectory: true,
-          presets: ['es2015', 'stage-0', 'react'],
-        },
+        test: /\.jsx?$/,
+        exclude: /(node_modules)/,
+        use: [{
+          loader: 'babel-loader',
+          options: {
+            cacheDirectory: true,
+            presets: ['env', 'stage-1', 'react'],
+          },
+        }],
       },
     ],
   },

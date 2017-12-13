@@ -1,6 +1,6 @@
 {
   "name": "gameoflife",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Game of Life project for FCC",
   "main": "build/index.js",
   "scripts": {
@@ -10,7 +10,8 @@
     "prebuild": "npm run clean",
     "build:server": "webpack -p --config ./webpack.server.js --progress --color",
     "build:app": "webpack -p --config ./webpack.production.config.js --progress --color",
-    "build": "cross-env NODE_ENV=production npm run build:app && npm run build:server",
+    "copyFavicon": "cp favicon.ico ./build/favicon.ico",
+    "build": "cross-env NODE_ENV=production npm run build:app && npm run build:server && npm run copyFavicon",
     "predeploy": "npm run build",
     "lint": "eslint app/",
     "start-production": "pm2 start -i 2 --name='GameOfLife' build/production.server.bundle.js",
