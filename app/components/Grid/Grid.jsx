@@ -1,8 +1,8 @@
 import React, { PropTypes, PureComponent } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import classnames from 'classnames';
-import Immutable from 'immutable';
-import _ from 'lodash';
+
+import blankGrid from 'Utils/blankGrid.js';
 
 import Box from '../Box/';
 
@@ -17,7 +17,7 @@ export default class Grid extends PureComponent {
 
   constructor(props) {
     super(props);
-    console.log(props);
+    // console.log(props);
 
     /** Styling */
     const wrapperClass = classnames({
@@ -25,18 +25,14 @@ export default class Grid extends PureComponent {
       [props.className]: !!props.className,
     });
 
-    /** Function Binding - only need for render */
-
-
     const board = this.props.board;
     const rows = board.get('rows');
     const cols = board.get('cols');
     const speed = board.get('speed');
 
+    /** Function Binding - only need for render */
     const fullGrid = this._createGrid(rows, cols);
-    console.log(fullGrid)
     const gridDisplay = this._createGridDisplay(fullGrid);
-
 
     /** State Creation */
     this.state = {
@@ -47,15 +43,15 @@ export default class Grid extends PureComponent {
       speed,
       gridDisplay,
     };
-
   }
 
-  componentWillReceiveProps(nextProps, actions) {
+  componentWillReceiveProps(nextProps) {
     const oldRows = this.state.rows;
     const oldSpeed = this.state.speed;
     const rows = nextProps.board.get('rows');
     const cols = nextProps.board.get('cols');
     const speed = nextProps.board.get('speed');
+    /* Board Size changed */
     if (oldRows !== rows) {  // board changed size
       clearInterval(this.props.board.get('intervalId'));
       const newGrid = this._createGrid(rows, cols);
@@ -65,7 +61,7 @@ export default class Grid extends PureComponent {
         cols,
       });
     }
-
+    /* When the speed changes restart the game, with new speed */
     if (oldSpeed !== speed) {
       this._playButton(speed);
       return this.setState({
@@ -92,17 +88,15 @@ export default class Grid extends PureComponent {
 
   componentDidMount() {
     this.props.actions.seed();
-    this._playButton(this.props.board.get('speed'));
+    this._playButton();
   }
 
   componentWillUnMount() {
-    clearInterval(this.props.board.get('intervalId'));
+    this.props.actions.stop();
   }
 
   _createGrid(rows, cols) {
-    const fullGrid = Immutable.List(Array(rows).fill()).map(
-      () => Immutable.List(Array(cols).fill(false))
-    );
+    const fullGrid = blankGrid(rows, cols);
     this.props.actions.createGrid(fullGrid);
     return fullGrid;
   }
@@ -129,8 +123,7 @@ export default class Grid extends PureComponent {
   }
 
   _playButton(speed) {
-    clearInterval(this.props.board.get('intervalId'));
-    this.props.actions.setIntervalId(
+    return this.props.actions.setIntervalId(
       setInterval(
         this.props.actions.playGame,
         speed
@@ -138,14 +131,12 @@ export default class Grid extends PureComponent {
     );
   }
 
-
   render() {
     const {
       wrapperClass,
       cols,
       gridDisplay,
     } = this.state;
-
 
     const width = cols * 14;
 

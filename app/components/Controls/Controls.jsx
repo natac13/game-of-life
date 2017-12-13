@@ -26,7 +26,7 @@ function Controls(props) {
     <section className={wrapperClass}>
       <Button
         type="button"
-        onClick={() => clearInterval(board.get('intervalId'))}
+        onClick={actions.stop}
       >Stop</Button>
 
       <Button

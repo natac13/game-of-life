@@ -10,7 +10,7 @@ import Display from '../../components/Display/';
 
 class App extends Component {
   componentWillMount() {
-    console.log('Mounted')
+    // console.log('Mounted')
   }
   render() {
     const { actions, error } = this.props;
@@ -41,7 +41,7 @@ App.propTypes = {
 //  Redux Connection
 function mapStateToProps(state) {
   return {
-    appName: 'ActionPlan',
+    appName: `Natac's Game Of Life`,
     routing: state.get('routing'),
     error: state.get('error'),
     board: state.get('board'),

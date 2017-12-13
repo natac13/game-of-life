@@ -1,9 +1,13 @@
 const path = require('path');
 const webpack = require('webpack');
-const autoprefixer = require('autoprefixer');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const uglifyJSPlugin = require('uglify-webpack-plugin');
 
+const extractSass = new ExtractTextPlugin({
+  // filename: '[name].[contenthash:base64:5].css',
+  filename: 'style.css',
+});
 
 const BUILD_PATH = path.join(__dirname, 'build');
 const ENTRY_PATH = path.join(__dirname, 'app', 'index.js');
@@ -22,77 +26,101 @@ module.exports = {
     filename: 'bundle.js',
   },
   resolve: {
-    extensions: ['', '.js', '.jsx', '.json', '.node', '.png', '.css', '.scss'],
+    alias: {  // can do import Main from Components/Main/; instead of full path
+      App: path.resolve(__dirname, 'app'),
+      Actions: path.resolve(__dirname, 'app', 'actions'),
+      Components: path.resolve(__dirname, 'app', 'components'),
+      Constants: path.resolve(__dirname, 'app', 'constants'),
+      Middleware: path.resolve(__dirname, 'app', 'middleware'),
+      Utils: path.resolve(__dirname, 'app', 'utils'),
+    },
+    extensions: ['.js', '.jsx', '.json', '.node', '.png', '.css', '.scss'],
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.jsx?$/,
         exclude: /(node_modules)/,
-        loader: 'babel',
-        query: {
-          cacheDirectory: true,
-          presets: ['es2015', 'stage-0', 'react'],
-        },
+        use: [{
+          loader: 'babel-loader',
+          options: {
+            cacheDirectory: true,
+            presets: [
+              'env',
+              'stage-1',
+              'react',
+            ],
+          },
+        }],
       },
       {
         test: /\.scss$/,
-        loader: ExtractTextPlugin.extract(
-          'style-loader',
-          'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss!sass'),
+        use: extractSass.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+                sourceMap: true,
+              },
+            },
+            { loader: 'postcss-loader', options: { sourceMap: true } },
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: true,
+                data: `@import "${path.resolve(__dirname, 'app/stylesheets/theme.scss')}";`,
+              },
+            },
+          ],
+        }),
       },
       {
-        test: /\.css$/,
-        loader: ExtractTextPlugin.extract(
-          'style-loader',
-          'css-loader'),
+        test: /\.css$/,  // needed for css import in app/index.js
+        use: extractSass.extract({
+          fallback: 'style-loader',
+          use: [
+            { loader: 'css-loader', options: { sourceMap: true } },
+          ],
+        }),
       },
       {
-        test: /\.json$/,
-        loader: 'json',
-      },
-      {
-        test: /\.(jpe?g|png|gif)$/,
-        loaders: [
-          'file?hash=sha512&digest=hex&name=[name]_[hash].[ext]',
-          'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false',
+        test: /\.(jpe?g|png|gif|svg)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[sha512:hash:base64:7]_[name].[ext]',
+            },
+          },
         ],
       },
       {
-        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'url-loader?limit=10000&mimetype=application/font-woff',
+        test: /\.(woff|woff2|eot|ttf|otf)$/,
+        use: ['file-loader'],
       },
       {
-        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'file-loader',
-      },
-      {
-        test: /\.csv$/,
-        loader: 'dsv-loader',
+        test: /\.(c|d|t)sv$/,
+        use: ['dsv-loader'],
       },
     ],
   },
-  postcss: [autoprefixer],
-  sassLoader: {
-    data: `@import "${path.resolve(__dirname, 'app/stylesheets/theme.scss')}";`,
-  },
   plugins: [
-    new ExtractTextPlugin('style.css', { allChunk: true }),
+    extractSass,
     new HtmlWebpackPlugin({
       template: './app/index.html',
       inject: false,
+      filename: 'index.html',
     }),
     new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.UglifyJsPlugin({
-      minimize: true,
-      compress: {
-        warnings: false,
-      },
+    uglifyJSPlugin({
+      cache: true,  // node_modules/.cache/uglify-webpack-plugin
+      parallel: true,
+      sourceMap: true,
     }),
-    new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': JSON.stringify('production'),
-      },
+    new webpack.EnvironmentPlugin({
+      'process.env.NODE_ENV': JSON.stringify('production'),
     }),
   ],
 };

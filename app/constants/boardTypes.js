@@ -10,3 +10,5 @@ export const FAST = 'FAST';
 export const SMALL = 'SMALL';
 export const MEDIUM = 'MEDIUM';
 export const LARGE = 'LARGE';
+export const START = 'START';
+export const STOP = 'STOP';

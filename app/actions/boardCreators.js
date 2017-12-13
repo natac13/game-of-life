@@ -12,6 +12,7 @@ import {
   SMALL,
   MEDIUM,
   LARGE,
+  STOP,
 } from '../constants/';
 
 const setGenerations = createAction(SET_GENERATIONS);
@@ -26,6 +27,7 @@ const fast = createAction(FAST);
 const small = createAction(SMALL);
 const medium = createAction(MEDIUM);
 const large = createAction(LARGE);
+const stop = createAction(STOP);
 
 export {
   setGenerations,
@@ -40,5 +42,6 @@ export {
   small,
   medium,
   large,
+  stop,
 };
 

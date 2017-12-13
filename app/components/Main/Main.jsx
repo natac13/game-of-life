@@ -1,9 +1,7 @@
 import React, { PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Button } from 'react-bootstrap';
 import classnames from 'classnames';
 
-import Header from '../Header/';
 import Grid from '../Grid/';
 import Controls from '../Controls/';
 
@@ -11,7 +9,6 @@ import style from './style.scss';
 
 function Main(props) {
   const {
-    appName,
     actions,
     board,
   } = props;
@@ -22,7 +19,6 @@ function Main(props) {
 
   return (
     <div className={wrapperClass}>
-      {/*<Header title={appName} />*/}
       <Controls
         actions={actions}
         board={board}

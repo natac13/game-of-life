@@ -13,6 +13,7 @@ import {
   SMALL,
   MEDIUM,
   LARGE,
+  STOP,
 } from '../constants/';
 
 
@@ -35,6 +36,11 @@ function clearGrid(state) {
   return state
     .set('fullGrid', fresh)
     .set('generations', 0);
+}
+
+function stop(state) {
+  clearInterval(state.get('intervalId'));
+  return state.set('intervalId', undefined);
 }
 
 function selectBox(state, { row, col }) {
@@ -68,8 +74,8 @@ function playGame(state) {
        * direction to determine which if statement handles what neighbor
        */
       let neighbours = 0;
-      /* Game of Life Rules*/
 
+      /* Game of Life Rules*/
       /* N */
       if (ir > 0) {  // if not the first row, same column
         if (fullGrid.getIn([ir - 1, ic])) {
@@ -148,6 +154,8 @@ function playGame(state) {
     .set('generations', nextGen);
 }
 
+
+/* The Reducer */
 function board(state = initialState, action) {
   switch (action.type) {
     case SET_GENERATIONS:
@@ -162,6 +170,8 @@ function board(state = initialState, action) {
       return playGame(state);
     case SET_INTERVAL_ID:
       return state.set('intervalId', action.payload);
+    case STOP:
+      return stop(state);
     case CLEAR_GRID:
       return clearGrid(state);
     case SLOW:
