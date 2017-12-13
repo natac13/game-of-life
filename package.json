@@ -11,6 +11,7 @@
     "build:server": "webpack -p --config ./webpack.server.js --progress --color",
     "build:app": "webpack -p --config ./webpack.production.config.js --progress --color",
     "copyFavicon": "cp favicon.ico ./build/favicon.ico",
+    "gh-pages": "rimraf docs/ && cp -r build/ docs/",
     "build": "cross-env NODE_ENV=production npm run build:app && npm run build:server && npm run copyFavicon",
     "predeploy": "npm run build",
     "lint": "eslint app/",
